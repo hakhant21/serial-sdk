@@ -1,0 +1,39 @@
+{
+    "name": "hakhant/sdk-dispenser",
+    "description": "Fuel Dispenser Protocol Communication",
+    "version": "1.0.0",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Htet Aung Khant",
+            "email": "hakhant21@gmail.com"
+        }
+    ],
+    "require": {
+        "react/event-loop": "^1.5",
+        "react/socket": "^1.16",
+        "react/stream": "^1.4"
+    },
+    "require-dev": {
+        "pestphp/pest": "^3.6",
+        "mockery/mockery": "^1.6",
+        "symfony/var-dumper": "^7.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hakhant\\Sdk\\Dispenser\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Hakhant\\Sdk\\Dispenser\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "license": "MIT"
+}
