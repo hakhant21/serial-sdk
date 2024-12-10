@@ -25,13 +25,27 @@ class SerialConnector implements ConnectorInterface
         }
 
         $serial = new Serial($this->serialPort, $this->baudRate);
+
         $serial->deviceSet($this->serialPort);
+
         $serial->confBaudRate($this->baudRate);
+        
+        $serial->confParity("none");
+        
+        $serial->confCharacterLength(8);
+        
+        $serial->confStopBits(1);
+        
+        $serial->confFlowControl("none");
+        
         $serial->deviceOpen();
 
-        $packedData = pack('C*', ...$data);
-        $serial->sendMessage($packedData);
+        $packData = implode('', array_map('chr', array_map('hexdec', $data)));
+
+        $serial->sendMessage($packData);
+
         $response = $serial->readPort();
+
         $serial->deviceClose();
 
         return $response;
