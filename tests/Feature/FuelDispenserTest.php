@@ -15,7 +15,9 @@ it('sends a command using FuelDispenser and receives a response', function () {
         ]
     ]);
     
-    $sdk->shouldReceive('sendCommand')->andReturn('01020304');
+    $sdk->shouldReceive('sendCommand')->andReturn('01preset');
 
-    expect($sdk->sendCommand(['01', '02', '03', '04']))->toBe('01020304');
+    $response = $sdk->sendCommand(['0x30', '0x31', '0x70', '0x72', '0x65', '0x73', '0x65', '0x74']);
+    
+    expect($response)->toBe('01preset');
 });
