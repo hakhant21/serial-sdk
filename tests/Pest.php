@@ -45,5 +45,22 @@ expect()->extend('toBeOne', function () {
 
 function startSocketServer($host, $port)
 {
-    
+    $loop = Loop::get();
+    $server = new SocketServer("$host:$port", [], $loop);
+    $server->on('connection', function ($connection) {
+        echo "Client connected {$connection->getAddress()}\n";
+        $connection->on('data', function ($data) use ($connection, $loop) {
+            echo "Received: {$data}\n";
+
+            $connection->write($data);
+
+            $connection->close();
+
+            $loop->stop();
+        });
+    });
+
+    echo "Server listening on $host:$port\n";
+    $loop->run();
 }
+

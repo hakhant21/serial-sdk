@@ -29,6 +29,9 @@
             "Hakhant\\Sdk\\Dispenser\\Tests\\": "tests"
         }
     },
+    "scripts": {
+        "test": "./vendor/bin/pest --colors=always"
+    },
     "config": {
         "allow-plugins": {
             "pestphp/pest-plugin": true

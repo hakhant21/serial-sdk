@@ -4,5 +4,5 @@ namespace Hakhant\Sdk\Dispenser\Contracts;
 
 interface ConnectorInterface
 {
-     public function send(array $data): string; 
+     public function send(array $data);
 }

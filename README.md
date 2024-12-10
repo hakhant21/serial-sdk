@@ -15,14 +15,28 @@ composer require hakhant/serial-sdk
 
 ```php
 
+
+// serial port usb
 $config = [
   'brand'=> 'redstar',
   'config' => [
-        'type' => 'serial',
+        'type' => 'serial', 
         'serialPort' => '/dev/ttyUSB0',
         'baudRate' => 9600
    ]
 ]
+
+// tcp/ip port
+$config = [
+  'brand'=> 'redstar',
+  'config' => [
+    'type' => 'tcp',
+    'host' => '127.0.0.1',
+    'port' => 1234
+  ]
+]
+
+
 
 $dispenser = new FuelDispenser($config);
 // 01preset
