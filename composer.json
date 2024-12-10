@@ -1,6 +1,6 @@
 {
     "name": "hakhant/serial-sdk",
-    "description": "Fuel Dispenser Protocol Communication",
+    "description": "The Serial Communication SDK is a PHP package designed for communicating with devices over serial ports. It simplifies the process of sending commands and receiving responses using phpSerial",
     "version": "1.0.0",
     "type": "library",
     "authors": [
