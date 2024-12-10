@@ -14,8 +14,6 @@ composer require hakhant/serial-sdk
 ### Usage 
 
 ```php
-
-
 // serial port usb
 $config = [
   'brand'=> 'redstar',
@@ -36,11 +34,16 @@ $config = [
   ]
 ]
 
-
-
 $dispenser = new FuelDispenser($config);
 // 01preset
 $response = $dispenser->sendCommand(['0x30', '0x31', '0x70', '0x72', '0x65', '0x73', '0x65', '0x74']); 
 
 echo $response;
+```
+
+### Testing
+
+```bash
+composer test
+
 ```
