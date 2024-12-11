@@ -1,19 +1,39 @@
-name: Test Suite
+name: PHP Composer
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ $default-branch ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ $default-branch ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    
+    - uses: actions/checkout@v4
+
+    - name: Validate composer.json
+      run: composer validate
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
     - name: Install dependencies
-      run: composer update --no-interaction 
-      
+      run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
+    # Docs: https://getcomposer.org/doc/articles/scripts.md
+
     - name: Run test suite
       run: composer run-script test
