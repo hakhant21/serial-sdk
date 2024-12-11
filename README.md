@@ -3,6 +3,8 @@
 
 ### The Serial Communication SDK is a PHP package designed for communicating with devices over serial ports. It simplifies the process of sending commands and receiving responses using phpSerial
 
+[![Testing](https://github.com/hakhant21/serial-sdk/actions/workflows/main.yml/badge.svg?branch=main&event=push)](https://github.com/hakhant21/serial-sdk/actions/workflows/main.yml)
+
 ### Installation
 
 ```bash
