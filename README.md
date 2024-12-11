@@ -28,9 +28,9 @@ $config = [
 $config = [
   'brand'=> 'redstar',
   'config' => [
-    'type' => 'tcp',
-    'host' => '127.0.0.1',
-    'port' => 1234
+      'type' => 'tcp',
+      'host' => '127.0.0.1',
+      'port' => 1234
   ]
 ]
 
