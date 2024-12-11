@@ -4,10 +4,10 @@ namespace Hakhant\Sdk\Dispenser\Protocols;
 
 use Hakhant\Sdk\Dispenser\Contracts\ConnectorInterface;
 
-class RedStar 
+class RedStar
 {
-    protected ConnectorInterface $connector;
-    public function __construct(ConnectorInterface $connector)
+    protected $connector;
+    public function __construct($connector)
     {
         $this->connector = $connector;
     }
@@ -16,7 +16,7 @@ class RedStar
     {
         $command = $this->buildCommand($command);
         $response = $this->connector->send($command);
-        return $this->parseResponse($response);
+        return $this->readResponse($response);
     }
 
     private function buildCommand(array $command): array
@@ -59,7 +59,7 @@ class RedStar
         return $crc & 0xFFFF;
     }
 
-    private function parseResponse(string $response): string
+    private function readResponse(string $response): string
     {
         $dataWithoutCRC = substr($response, 0, -2);  // All bytes except the last 2 (CRC bytes)
 
@@ -67,7 +67,7 @@ class RedStar
         $receivedCRC = substr($response, -2);  // The last two bytes are assumed to be the received CRC
 
         // Step 3: Calculate the CRC for the data (without the CRC part)
-        $calculatedCRC = calculateCRC($dataWithoutCRC);  // Call to the CRC calculation function
+        $calculatedCRC = $this->calculateCRC(str_split($dataWithoutCRC));  // Call to the CRC calculation function
 
         // Step 4: Split the calculated CRC into two bytes (low byte and high byte)
         $crcLow = chr($calculatedCRC & 0xFF);         // Low byte of the CRC (last 8 bits)

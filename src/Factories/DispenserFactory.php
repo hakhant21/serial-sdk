@@ -10,7 +10,7 @@ class DispenserFactory
     {
         switch ($brand) {
             case 'redstar':
-                return new RedStar($connector);
+                return new RedStar($connector); 
             default:
                 throw new \InvalidArgumentException("Unsupported dispenser brand: " . $brand);
         }

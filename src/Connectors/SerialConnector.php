@@ -8,78 +8,62 @@ use Hakhant\Sdk\Dispenser\Contracts\ConnectorInterface;
 
 class SerialConnector implements ConnectorInterface
 {
-    protected string $serialPort;
-    protected int $baudRate;
+    private $serialPort;
+    private $baudRate;
+    private $serial;
+
     public function __construct(string $serialPort, int $baudRate)
     {
         $this->serialPort = $serialPort;
         $this->baudRate = $baudRate;
+        $this->serial = $this->initializeSerial();
     }
 
     public function send(array $data): string
     {
-        $handle = $this->openSerialPort();
+        $this->configureSerialPort();
 
-        if (!$handle) {
-            throw new RuntimeException("Unable to open serial port: " . $this->serialPort);
-        }
+        $packedData = $this->packData($data);
 
-        $serial = new Serial($this->serialPort, $this->baudRate);
+        $this->serial->sendMessage($packedData);
 
-        $serial->deviceSet($this->serialPort);
+        $response = $this->serial->readPort();
 
-        $serial->confBaudRate($this->baudRate);
-        
-        $serial->confParity("none");
-        
-        $serial->confCharacterLength(8);
-        
-        $serial->confStopBits(1);
-        
-        $serial->confFlowControl("none");
-        
-        $serial->deviceOpen();
-
-        $packData = implode('', array_map('chr', array_map('hexdec', $data)));
-
-        $serial->sendMessage($packData);
-
-        $response = $serial->readPort();
-
-        $serial->deviceClose();
+        $this->serial->deviceClose();
 
         return $response;
     }
 
-    private function openSerialPort()
+    protected function initializeSerial(): Serial
     {
-        if (!file_exists($this->serialPort)) {
-            throw new RuntimeException("Serial port not found: " . $this->serialPort);
-        }
-
-        $handle = @fopen($this->serialPort, 'w+b');
-        if (!$handle) {
-            return false;
-        }
-
-        // Configure serial port settings
-        $this->configureSerialPort();
-
-        return $handle;
+        return new Serial();
     }
 
-    private function configureSerialPort()
+    protected function configureSerialPort(): void
     {
-        if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
-            // Windows-specific configuration
-            exec("mode COM1: BAUD={$this->baudRate} PARITY=N DATA=8 STOP=1");
-        } else {
-            // Unix-based configuration
-            $command = sprintf('stty -F %s %d cs8 -cstopb -parenb', escapeshellarg($this->serialPort), $this->baudRate);
-            exec($command);
-        }
+        $this->validateSerialPort(); 
+        $this->serial->deviceSet($this->serialPort);
+        $this->serial->confBaudRate($this->baudRate);
+        $this->serial->confParity('none');
+        $this->serial->confCharacterLength(8);
+        $this->serial->confStopBits(1);
+        $this->serial->confFlowControl('none');
+        $this->serial->deviceOpen();
     }
 
+    protected function validateSerialPort(): void
+    {
+        if(!$this->serial->deviceSet($this->serialPort)) {
+            throw new RuntimeException("Failed to set serial port: {$this->serialPort}");
+        }  
+    }
+
+    protected function packData(array $hexData): string
+    {
+        return implode('', array_map(function($hex) {
+            return chr(hexdec(str_replace('0x', '', $hex)));
+        }, $hexData));
+    }
 
     public function getSerialPort(): string
     {
