@@ -15,7 +15,9 @@ class RedStar
     public function sendCommand(array $command): string
     {
         $command = $this->buildCommand($command);
+
         $response = $this->connector->send($command);
+
         return $this->readResponse($response);
     }
 
