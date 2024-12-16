@@ -24,7 +24,7 @@ $config = [
         'serialPort' => '/dev/ttyUSB0',
         'baudRate' => 9600
    ]
-]
+];
 
 // tcp/ip port
 $config = [
@@ -34,7 +34,7 @@ $config = [
       'host' => '127.0.0.1',
       'port' => 1234
   ]
-]
+];
 
 $dispenser = new FuelDispenser($config);
 // 01preset
